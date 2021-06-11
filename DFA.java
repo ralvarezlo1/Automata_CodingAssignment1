@@ -73,7 +73,51 @@ public class DFA {
 
     // TODO: Task 2
     public boolean isValid(){
-
+//  If there is no start state (remember that the start state is stored in this.startState), return False
+//        System.out.println("The start state is: "+this.startState);
+        if (this.startState == null) {return false;}
+//	If the start state is not one of the states contained in this.states, return False
+//        System.out.print("The states are: ");
+//        for (String s : this.states){
+//            System.out.print(s+"\t");
+//        }
+//        System.out.println("");
+        if(!this.states.contains(this.startState)) {return false;}
+//  If any of the accept states is not one of the states contained in this.states, return False
+//        System.out.print("The accept states are: ");
+//        for (String aS : this.acceptStates){
+//            System.out.print(aS+"\t");
+//        }
+//        System.out.println("");
+        for (String s : this.acceptStates){
+            if (!this.states.contains(s)) {return false;}
+        }
+//  Every state in self.states should have a transition for every symbol in self.alphabet. If there are missing transitions in this.transitionFunction, return False
+//        System.out.print("The transition keys are: ");
+//        for (String kS : this.transitionFunction.keySet()){
+//            System.out.print(kS+"\t");
+//        }
+//        System.out.println("");
+        for (String s : this.states){
+            for (String a : this.alphabet){
+                if(!this.transitionFunction.containsKey(s+":"+a)) {return false;}
+            }
+        }
+//  If there are invalid transitions in this.transitionFunction, return False. A transition is invalid if: 1) the source state is not in this.states, and/or
+//  2) the symbol is not in self.alphabet, and/or 3) the destination state is not in this.states.
+//        System.out.print("The transition values are: ");
+//        for (String kV : this.transitionFunction.values()){
+//            System.out.print(kV+"\t");
+//        }
+//        System.out.println("");
+        for (String k : this.transitionFunction.keySet()){
+            if(!this.states.contains(k.substring(0,k.indexOf(":")))) {return false;}
+            if(!this.alphabet.contains(k.substring(k.indexOf(":")+1))) {return false;}
+        }
+        for (String v : this.transitionFunction.values()){
+            if(!this.states.contains(v)) {return false;}
+        }
+//  Return True if none of the previous conditions were met.
         return true;
     }
 
